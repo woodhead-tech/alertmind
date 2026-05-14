@@ -36,6 +36,7 @@ Be direct and specific. Name actual commands, not vague suggestions. If context 
 type Client struct {
 	apiKey string
 	model  string
+	apiURL string
 	http   *http.Client
 }
 
@@ -43,6 +44,16 @@ func New(apiKey, model string) *Client {
 	return &Client{
 		apiKey: apiKey,
 		model:  model,
+		apiURL: apiURL,
+		http:   &http.Client{},
+	}
+}
+
+func newWithURL(apiKey, model, url string) *Client {
+	return &Client{
+		apiKey: apiKey,
+		model:  model,
+		apiURL: url,
 		http:   &http.Client{},
 	}
 }
@@ -84,7 +95,7 @@ func (c *Client) Triage(ctx context.Context, alertContext string) (*alert.Triage
 		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, apiURL, bytes.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.apiURL, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}

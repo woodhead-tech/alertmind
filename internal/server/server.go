@@ -49,6 +49,10 @@ func New(cfg *config.Config) *Server {
 	return s
 }
 
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.mux.ServeHTTP(w, r)
+}
+
 func (s *Server) Start() error {
 	return http.ListenAndServe(":"+s.cfg.Port, s.mux)
 }
