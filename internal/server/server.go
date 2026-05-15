@@ -1,3 +1,5 @@
+// Package server implements the alertmind HTTP server.
+// Routes: GET /health, POST /webhook (Alertmanager), POST /test (synthetic alert).
 package server
 
 import (
@@ -14,6 +16,7 @@ import (
 	"github.com/whitenhiemer/alertmind/internal/notifier"
 )
 
+// Server wires together the LLM client, notifiers, and HTTP routes.
 type Server struct {
 	cfg      *config.Config
 	llm      *llm.Client
@@ -21,6 +24,7 @@ type Server struct {
 	mux      *http.ServeMux
 }
 
+// New creates a Server from cfg, initialising notifiers based on which webhook URLs are set.
 func New(cfg *config.Config) *Server {
 	llmClient := llm.New(cfg.AnthropicAPIKey, cfg.Model)
 
@@ -53,6 +57,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.mux.ServeHTTP(w, r)
 }
 
+// Start begins listening on the configured port. Blocks until the server exits.
 func (s *Server) Start() error {
 	return http.ListenAndServe(":"+s.cfg.Port, s.mux)
 }
@@ -82,6 +87,8 @@ func (s *Server) test(w http.ResponseWriter, r *http.Request) {
 	go s.process(payload)
 }
 
+// process runs the full triage pipeline in a goroutine: enrich → LLM → notify.
+// On LLM failure it sends a fallback notification rather than dropping the alert silently.
 func (s *Server) process(payload *alert.AlertmanagerPayload) {
 	if len(payload.Alerts) == 0 {
 		return

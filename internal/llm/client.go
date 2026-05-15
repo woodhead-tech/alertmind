@@ -1,3 +1,4 @@
+// Package llm calls the Anthropic Messages API to triage a firing alert group.
 package llm
 
 import (
@@ -13,7 +14,7 @@ import (
 )
 
 const (
-	apiURL    = "https://api.anthropic.com/v1/messages"
+	apiURL     = "https://api.anthropic.com/v1/messages"
 	apiVersion = "2023-06-01"
 	maxTokens  = 1024
 
@@ -33,6 +34,7 @@ Use this exact structure:
 Be direct and specific. Name actual commands, not vague suggestions. If context is insufficient, say so in probable_cause rather than guessing.`
 )
 
+// Client sends alert context to the Anthropic API and parses the structured triage response.
 type Client struct {
 	apiKey string
 	model  string
@@ -40,6 +42,7 @@ type Client struct {
 	http   *http.Client
 }
 
+// New creates a Client using the production Anthropic API endpoint.
 func New(apiKey, model string) *Client {
 	return &Client{
 		apiKey: apiKey,
@@ -49,6 +52,7 @@ func New(apiKey, model string) *Client {
 	}
 }
 
+// newWithURL creates a Client pointed at a custom endpoint — used in tests to mock the API.
 func newWithURL(apiKey, model, url string) *Client {
 	return &Client{
 		apiKey: apiKey,
@@ -80,6 +84,8 @@ type messagesResponse struct {
 	} `json:"error"`
 }
 
+// Triage sends alertContext to the LLM and returns a structured Triage result.
+// alertContext should be the output of enricher.BuildPrompt.
 func (c *Client) Triage(ctx context.Context, alertContext string) (*alert.Triage, error) {
 	reqBody := messagesRequest{
 		Model:     c.model,
@@ -133,7 +139,7 @@ func (c *Client) Triage(ctx context.Context, alertContext string) (*alert.Triage
 	return &triage, nil
 }
 
-// extractJSON strips markdown code fences if the model wraps its output.
+// extractJSON strips markdown code fences if the model wraps its JSON output despite instructions.
 func extractJSON(s string) string {
 	s = strings.TrimSpace(s)
 	if strings.HasPrefix(s, "```") {

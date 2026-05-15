@@ -1,3 +1,5 @@
+// Package enricher builds the LLM prompt from an Alertmanager payload,
+// optionally fetching runbook content to include as context.
 package enricher
 
 import (
@@ -12,11 +14,14 @@ import (
 )
 
 const (
+	// runbookMaxBytes caps how much runbook content is included in the prompt.
+	// Keeps context size predictable and avoids blowing the model's token budget.
 	runbookMaxBytes = 3000
 	fetchTimeout    = 5 * time.Second
 )
 
-// BuildPrompt constructs the user prompt from an alert payload and optional runbook content.
+// BuildPrompt constructs the LLM user prompt from an alert payload and optional runbook content.
+// The resulting string is passed directly to the LLM as the user turn.
 func BuildPrompt(payload *alert.AlertmanagerPayload, fetchRunbooks bool) string {
 	var sb strings.Builder
 
@@ -45,7 +50,7 @@ func BuildPrompt(payload *alert.AlertmanagerPayload, fetchRunbooks bool) string 
 			sb.WriteString(fmt.Sprintf("Firing for: %s\n", duration))
 		}
 
-		// Extra labels
+		// Append any labels not already covered above.
 		skip := map[string]bool{"alertname": true, "severity": true, "instance": true, "job": true}
 		for k, v := range a.Labels {
 			if !skip[k] {
@@ -53,11 +58,9 @@ func BuildPrompt(payload *alert.AlertmanagerPayload, fetchRunbooks bool) string 
 			}
 		}
 
-		// Runbook
 		if fetchRunbooks {
 			if url := a.Annotations["runbook_url"]; url != "" {
-				content := fetchRunbook(url)
-				if content != "" {
+				if content := fetchRunbook(url); content != "" {
 					sb.WriteString(fmt.Sprintf("\nRunbook (%s):\n%s\n", url, content))
 				}
 			}
@@ -68,6 +71,8 @@ func BuildPrompt(payload *alert.AlertmanagerPayload, fetchRunbooks bool) string 
 	return sb.String()
 }
 
+// fetchRunbook fetches the runbook at url and returns its content, capped at runbookMaxBytes.
+// Returns an empty string on any error so callers can skip silently.
 func fetchRunbook(url string) string {
 	ctx, cancel := context.WithTimeout(context.Background(), fetchTimeout)
 	defer cancel()

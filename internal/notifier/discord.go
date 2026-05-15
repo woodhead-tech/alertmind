@@ -18,11 +18,13 @@ const (
 	colorWarning  = 0xFB8C00 // orange
 )
 
+// Discord delivers triage summaries as Discord embeds via an incoming webhook.
 type Discord struct {
 	webhookURL string
 	http       *http.Client
 }
 
+// NewDiscord returns a Discord notifier that posts to the given webhook URL.
 func NewDiscord(webhookURL string) *Discord {
 	return &Discord{webhookURL: webhookURL, http: &http.Client{Timeout: 10 * time.Second}}
 }
@@ -50,6 +52,7 @@ type discordFooter struct {
 	Text string `json:"text"`
 }
 
+// Notify builds and POSTs a Discord embed for the alert group.
 func (d *Discord) Notify(ctx context.Context, payload *alert.AlertmanagerPayload, triage *alert.Triage) error {
 	msg := buildDiscordMessage(payload, triage)
 

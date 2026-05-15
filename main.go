@@ -1,3 +1,9 @@
+// alertmind receives Alertmanager webhooks, triages them with an LLM, and posts
+// structured summaries to Slack and/or Discord.
+//
+// Required env: ANTHROPIC_API_KEY
+// At least one of: SLACK_WEBHOOK_URL, DISCORD_WEBHOOK_URL
+// See README for full configuration reference.
 package main
 
 import (

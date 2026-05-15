@@ -12,11 +12,13 @@ import (
 	"github.com/whitenhiemer/alertmind/internal/alert"
 )
 
+// Slack delivers triage summaries as Slack Block Kit messages via an incoming webhook.
 type Slack struct {
 	webhookURL string
 	http       *http.Client
 }
 
+// NewSlack returns a Slack notifier that posts to the given webhook URL.
 func NewSlack(webhookURL string) *Slack {
 	return &Slack{webhookURL: webhookURL, http: &http.Client{Timeout: 10 * time.Second}}
 }
@@ -36,6 +38,7 @@ type slackText struct {
 	Text string `json:"text"`
 }
 
+// Notify builds and POSTs a Slack Block Kit message for the alert group.
 func (s *Slack) Notify(ctx context.Context, payload *alert.AlertmanagerPayload, triage *alert.Triage) error {
 	msg := buildSlackMessage(payload, triage)
 

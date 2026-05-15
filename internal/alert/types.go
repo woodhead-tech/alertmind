@@ -1,8 +1,9 @@
+// Package alert defines the wire types for Alertmanager webhook payloads and LLM triage output.
 package alert
 
 import "time"
 
-// AlertmanagerPayload is the webhook payload sent by Alertmanager.
+// AlertmanagerPayload is the webhook payload sent by Alertmanager on each fired or resolved group.
 type AlertmanagerPayload struct {
 	Version           string            `json:"version"`
 	GroupKey          string            `json:"groupKey"`
@@ -16,6 +17,7 @@ type AlertmanagerPayload struct {
 	Alerts            []Alert           `json:"alerts"`
 }
 
+// Alert is a single alert within a group payload.
 type Alert struct {
 	Status       string            `json:"status"`
 	Labels       map[string]string `json:"labels"`
@@ -26,11 +28,11 @@ type Alert struct {
 	GeneratorURL string            `json:"generatorURL"`
 }
 
-// Triage is the structured analysis returned by the LLM.
+// Triage is the structured analysis returned by the LLM for a firing alert group.
 type Triage struct {
-	ProbableCause          string   `json:"probable_cause"`
-	SeverityAssessment     string   `json:"severity_assessment"`
-	ImmediateActions       []string `json:"immediate_actions"`
-	InvestigationCommands  []string `json:"investigation_commands"`
-	Notes                  string   `json:"notes,omitempty"`
+	ProbableCause         string   `json:"probable_cause"`
+	SeverityAssessment    string   `json:"severity_assessment"`
+	ImmediateActions      []string `json:"immediate_actions"`
+	InvestigationCommands []string `json:"investigation_commands"`
+	Notes                 string   `json:"notes,omitempty"`
 }
