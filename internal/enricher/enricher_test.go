@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/alert"
 )
 
 func testPayload() *alert.AlertmanagerPayload {

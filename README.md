@@ -65,13 +65,13 @@ alertmind turns that into:
 docker run -p 8080:8080 \
   -e ANTHROPIC_API_KEY=sk-ant-... \
   -e DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/... \
-  ghcr.io/whitenhiemer/alertmind:latest
+  ghcr.io/woodhead-tech/alertmind:latest
 ```
 
 ### Binary
 
 ```bash
-git clone https://github.com/whitenhiemer/alertmind
+git clone https://github.com/woodhead-tech/alertmind
 cd alertmind
 go build -o alertmind .
 
@@ -152,7 +152,7 @@ curl -X POST http://localhost:8080/test
 ```yaml
 services:
   alertmind:
-    image: ghcr.io/whitenhiemer/alertmind:latest
+    image: ghcr.io/woodhead-tech/alertmind:latest
     ports:
       - "8080:8080"
     environment:

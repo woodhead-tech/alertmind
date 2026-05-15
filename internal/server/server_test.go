@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/whitenhiemer/alertmind/internal/config"
+	"github.com/woodhead-tech/alertmind/internal/config"
 )
 
 func newTestServer() *Server {

@@ -4,7 +4,7 @@ package notifier
 import (
 	"context"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/alert"
 )
 
 // Notifier sends a triage summary for an alert group.

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/alert"
 )
 
 const (

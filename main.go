@@ -9,8 +9,8 @@ package main
 import (
 	"log"
 
-	"github.com/whitenhiemer/alertmind/internal/config"
-	"github.com/whitenhiemer/alertmind/internal/server"
+	"github.com/woodhead-tech/alertmind/internal/config"
+	"github.com/woodhead-tech/alertmind/internal/server"
 )
 
 func main() {

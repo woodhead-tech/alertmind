@@ -1,3 +1,3 @@
-module github.com/whitenhiemer/alertmind
+module github.com/woodhead-tech/alertmind
 
 go 1.23

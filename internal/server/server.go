@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
-	"github.com/whitenhiemer/alertmind/internal/config"
-	"github.com/whitenhiemer/alertmind/internal/enricher"
-	"github.com/whitenhiemer/alertmind/internal/llm"
-	"github.com/whitenhiemer/alertmind/internal/notifier"
+	"github.com/woodhead-tech/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/config"
+	"github.com/woodhead-tech/alertmind/internal/enricher"
+	"github.com/woodhead-tech/alertmind/internal/llm"
+	"github.com/woodhead-tech/alertmind/internal/notifier"
 )
 
 // Server wires together the LLM client, notifiers, and HTTP routes.

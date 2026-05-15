@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/alert"
 )
 
 type stubNotifier struct {

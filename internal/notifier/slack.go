@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/alert"
 )
 
 // Slack delivers triage summaries as Slack Block Kit messages via an incoming webhook.

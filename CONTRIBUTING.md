@@ -5,7 +5,7 @@ Bug reports, fixes, and features are welcome.
 ## Getting started
 
 ```bash
-git clone https://github.com/whitenhiemer/alertmind
+git clone https://github.com/woodhead-tech/alertmind
 cd alertmind
 go build ./...
 go test ./...

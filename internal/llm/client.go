@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/whitenhiemer/alertmind/internal/alert"
+	"github.com/woodhead-tech/alertmind/internal/alert"
 )
 
 const (
