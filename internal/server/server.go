@@ -37,6 +37,10 @@ func New(cfg *config.Config) *Server {
 		notifiers = append(notifiers, notifier.NewDiscord(cfg.DiscordWebhookURL))
 		log.Println("notifier: Discord enabled")
 	}
+	if cfg.TwilioAccountSID != "" && cfg.TwilioAuthToken != "" && cfg.WhatsAppFrom != "" && cfg.WhatsAppTo != "" {
+		notifiers = append(notifiers, notifier.NewWhatsApp(cfg.TwilioAccountSID, cfg.TwilioAuthToken, cfg.WhatsAppFrom, cfg.WhatsAppTo))
+		log.Println("notifier: WhatsApp enabled")
+	}
 	if len(notifiers) == 0 {
 		log.Println("warning: no notifiers configured (set SLACK_WEBHOOK_URL or DISCORD_WEBHOOK_URL)")
 	}

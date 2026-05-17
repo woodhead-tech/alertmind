@@ -8,6 +8,10 @@ type Config struct {
 	AnthropicAPIKey   string
 	SlackWebhookURL   string
 	DiscordWebhookURL string
+	TwilioAccountSID  string
+	TwilioAuthToken   string
+	WhatsAppFrom      string
+	WhatsAppTo        string
 	Port              string
 	Model             string
 	FetchRunbooks     bool
@@ -28,6 +32,10 @@ func Load() *Config {
 		AnthropicAPIKey:   os.Getenv("ANTHROPIC_API_KEY"),
 		SlackWebhookURL:   os.Getenv("SLACK_WEBHOOK_URL"),
 		DiscordWebhookURL: os.Getenv("DISCORD_WEBHOOK_URL"),
+		TwilioAccountSID:  os.Getenv("TWILIO_ACCOUNT_SID"),
+		TwilioAuthToken:   os.Getenv("TWILIO_AUTH_TOKEN"),
+		WhatsAppFrom:      os.Getenv("WHATSAPP_FROM"),
+		WhatsAppTo:        os.Getenv("WHATSAPP_TO"),
 		Port:              port,
 		Model:             model,
 		// FetchRunbooks defaults to true; set FETCH_RUNBOOKS=false to disable.
