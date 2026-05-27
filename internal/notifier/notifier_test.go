@@ -33,15 +33,32 @@ func TestMulti_callsAllNotifiers(t *testing.T) {
 	}
 }
 
-func TestMulti_returnsLastError(t *testing.T) {
+func TestMulti_returnsErrorOnlyWhenAllFail(t *testing.T) {
 	errA := errors.New("notifier A failed")
 	errB := errors.New("notifier B failed")
 	m := NewMulti(&stubNotifier{err: errA}, &stubNotifier{err: errB})
 
 	err := m.Notify(context.Background(), &alert.AlertmanagerPayload{}, &alert.Triage{})
 
+	if err == nil {
+		t.Error("expected error when all notifiers fail, got nil")
+	}
+	if !errors.Is(err, errA) {
+		t.Errorf("expected joined error to contain errA, got: %v", err)
+	}
 	if !errors.Is(err, errB) {
-		t.Errorf("expected last error errB, got: %v", err)
+		t.Errorf("expected joined error to contain errB, got: %v", err)
+	}
+}
+
+func TestMulti_returnsNilWhenAtLeastOneSucceeds(t *testing.T) {
+	errA := errors.New("notifier A failed")
+	m := NewMulti(&stubNotifier{err: errA}, &stubNotifier{})
+
+	err := m.Notify(context.Background(), &alert.AlertmanagerPayload{}, &alert.Triage{})
+
+	if err != nil {
+		t.Errorf("expected nil when at least one notifier succeeds, got: %v", err)
 	}
 }
 
